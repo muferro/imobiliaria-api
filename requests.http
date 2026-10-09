@@ -1,0 +1,223 @@
+### Imobiliária API - Collection de Requisições
+# Use com: Insomnia, Postman, VS Code REST Client, ou curl
+
+@baseUrl = http://localhost:3000
+
+### ============================================
+### Health Check
+### ============================================
+
+GET {{baseUrl}}/health
+
+### API Info
+GET {{baseUrl}}/api/info
+
+---
+
+### ============================================
+### Housing Locations (Imóveis)
+### ============================================
+
+### Listar todos os imóveis (sem filtros)
+GET {{baseUrl}}/locations
+
+### Listar com paginação
+GET {{baseUrl}}/locations?page=1&limit=5
+
+### Filtrar por cidade
+GET {{baseUrl}}/locations?city=Chicago
+
+### Filtrar por estado
+GET {{baseUrl}}/locations?state=SP
+
+### Filtrar por cidade e estado com paginação
+GET {{baseUrl}}/locations?page=1&limit=10&city=Chicago&state=IL
+
+### Obter imóvel por ID
+GET {{baseUrl}}/locations/507f1f77bcf86cd799439011
+
+### Criar novo imóvel
+POST {{baseUrl}}/locations
+Content-Type: application/json
+
+{
+  "name": "Apartamento Moderno",
+  "city": "Rio de Janeiro",
+  "state": "RJ",
+  "photo": "https://via.placeholder.com/300",
+  "availableUnits": 3,
+  "wifi": true,
+  "laundry": false
+}
+
+### Criar imóvel - Exemplo 2
+POST {{baseUrl}}/locations
+Content-Type: application/json
+
+{
+  "name": "Casa Aconchegante",
+  "city": "Brasília",
+  "state": "DF",
+  "photo": "https://via.placeholder.com/300x200",
+  "availableUnits": 2,
+  "wifi": true,
+  "laundry": true
+}
+
+### Atualizar imóvel
+PUT {{baseUrl}}/locations/507f1f77bcf86cd799439011
+Content-Type: application/json
+
+{
+  "availableUnits": 2,
+  "wifi": false
+}
+
+### Deletar imóvel
+DELETE {{baseUrl}}/locations/507f1f77bcf86cd799439011
+
+---
+
+### ============================================
+### Applications (Aplicações/Solicitações)
+### ============================================
+
+### Listar todas as aplicações
+GET {{baseUrl}}/applications
+
+### Listar com paginação
+GET {{baseUrl}}/applications?page=1&limit=10
+
+### Filtrar por status (pending, approved, rejected)
+GET {{baseUrl}}/applications?status=pending
+
+### Obter aplicação por ID
+GET {{baseUrl}}/applications/507f1f77bcf86cd799439012
+
+### Criar nova aplicação
+POST {{baseUrl}}/applications
+Content-Type: application/json
+
+{
+  "firstName": "João",
+  "lastName": "Silva",
+  "email": "joao@example.com",
+  "phone": "+5511999999999",
+  "message": "Tenho interesse neste imóvel"
+}
+
+### Criar aplicação - Com referência a imóvel
+POST {{baseUrl}}/applications
+Content-Type: application/json
+
+{
+  "firstName": "Maria",
+  "lastName": "Santos",
+  "email": "maria@example.com",
+  "phone": "+5511988888888",
+  "housingLocationId": "507f1f77bcf86cd799439011",
+  "message": "Gostaria de mais informações sobre este imóvel"
+}
+
+### Criar aplicação - Mínimo
+POST {{baseUrl}}/applications
+Content-Type: application/json
+
+{
+  "firstName": "Pedro",
+  "lastName": "Oliveira",
+  "email": "pedro@example.com"
+}
+
+### Atualizar status para approved
+PUT {{baseUrl}}/applications/507f1f77bcf86cd799439012/status
+Content-Type: application/json
+
+{
+  "status": "approved"
+}
+
+### Atualizar status para rejected
+PUT {{baseUrl}}/applications/507f1f77bcf86cd799439012/status
+Content-Type: application/json
+
+{
+  "status": "rejected"
+}
+
+### Atualizar status para pending
+PUT {{baseUrl}}/applications/507f1f77bcf86cd799439012/status
+Content-Type: application/json
+
+{
+  "status": "pending"
+}
+
+### Deletar aplicação
+DELETE {{baseUrl}}/applications/507f1f77bcf86cd799439012
+
+---
+
+### ============================================
+### Exemplos de Erros (para teste)
+### ============================================
+
+### Erro: ID inválido
+GET {{baseUrl}}/locations/invalid-id
+
+### Erro: Imóvel não encontrado
+GET {{baseUrl}}/locations/507f1f77bcf86cd799439099
+
+### Erro: Validação falha (email inválido)
+POST {{baseUrl}}/applications
+Content-Type: application/json
+
+{
+  "firstName": "João",
+  "lastName": "Silva",
+  "email": "email-invalido"
+}
+
+### Erro: Campo obrigatório faltando
+POST {{baseUrl}}/locations
+Content-Type: application/json
+
+{
+  "city": "São Paulo",
+  "state": "SP",
+  "photo": "https://via.placeholder.com/300"
+}
+
+### Erro: Status inválido
+PUT {{baseUrl}}/applications/507f1f77bcf86cd799439012/status
+Content-Type: application/json
+
+{
+  "status": "invalid_status"
+}
+
+### Erro: Rota não existe
+GET {{baseUrl}}/rota-inexistente
+
+---
+
+### ============================================
+### Dicas de Uso
+### ============================================
+
+# Para VS Code REST Client:
+# 1. Instale extensão: REST Client
+# 2. Use Ctrl+Alt+R (ou Cmd+Alt+R no Mac) para fazer requisição
+# 3. Clique em "Send Request" acima de cada requisição
+
+# Para Insomnia/Postman:
+# 1. Abra a ferramenta
+# 2. Clique em "Import" e selecione este arquivo
+# 3. Crie um ambiente com @baseUrl = http://localhost:3000
+# 4. Importe e use as requisições
+
+# Para curl:
+# Copie e cole as requisições no terminal
+# Ou crie um script .sh para automatizar testes
+
+---
